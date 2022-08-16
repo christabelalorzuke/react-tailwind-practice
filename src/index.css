@@ -8,3 +8,13 @@
     height: 10rem;
 
 } */
+@layer components {
+    .form-label{
+       
+         @apply block text-lg text-gray-500 
+    }
+
+    .form-input {
+        @apply border rounded-md w-full outline-none py-1 px-2 text-lg text-green-700 
+    }
+}
