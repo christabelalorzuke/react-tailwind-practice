@@ -118,7 +118,6 @@ function Form() {
                                 onChange= {handleChange}
                             />
                         </div>
-
                         <div>
                             <button type=' submit ' className='bg-green-800 p-1 text-white mt-10 p-2'> Register </button>
                         </div>
