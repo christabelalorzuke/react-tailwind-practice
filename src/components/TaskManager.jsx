@@ -1,40 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TaskItem from './TaskItem';
-import background from "../assets/Background.jpg";
+// import background from "../assets/ColorArt.jpg";
 // import {list} from "postcss";
 
 
+   
+const getTasksFromlocalStorage = ()=> {
+  // get the task from the localStorage
+const savedTasks = localStorage.getItem("tasks");
+if(!savedTasks) return [];
+return JSON.parse(savedTasks);
+};
+
 
 function TaskManager() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(getTasksFromlocalStorage )
   const [ input, setInput] = useState("");
 
 
   const handleSubmit= (e) =>{
     e.preventDefault();
-    if(input==="") return;
+//     if(input==="") return;
 
     setTasks([input, ...tasks] , () =>{});
-    setInput("");
-};
+    setInput("")
+    localStorage.setItem("tasks" , JSON.stringify(tasks));
+  };
 
-  return (
+    useEffect( () => {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks] );
 
-    <div className=" flex bg-purple-700 h-screen  justify-center items-center ">
-       {/* <img id='sunset' src={''} alt=""/> */}
-        <div className='max-w-xxl bg-white rounded-xl px-20 py-20 overflow-hidden'>
+// };
+  const handleDelete =idx=> {
+    const newTasks = tasks.filter(task=>task!==idx)
+    setTasks(newTasks)
+  }
+ 
 
-          <div className=' h-full flex justify-center rounded-xl px-5 py-10 bg-slate-800/950'>
-          <img
-          src={background}
-          alt=""    
-          />
-         </div>
-          <div className='max-w-xl w-full max-h-96 bg-white'>
+   return(
 
-            <form 
-              onSubmit={handleSubmit}
+    <div className="relative h-screen w-full bg-slate-800/90 ">
+    {/* //    <img src={background}alt="" */}
+    
+        <div className='h-full bg-blue-600 justify-center items-center flex px-5 py-10'>
+
+          <div className=' max-w-xl px-5 py-10 bg-white rounded-xl max-h-[500px]'>
+
+
+            <form               
               className="w-full space-x-5 flex justify-between mb-10"
+              onSubmit={handleSubmit}
             >
 
               <input 
@@ -51,18 +67,20 @@ function TaskManager() {
                     Add
               </button>
           </form>
-                <div className='space-y-2 overflow-y-auto h-56'>
+            <div className='space-y-2 overflow-y-auto h-56'>
                   {
                     tasks.map((task) => (
-                      <TaskItem task={task} />))
+                      <TaskItem task={task} handleDelete={handleDelete} />))
                   }
-        </div>      
+             </div>      
       </div>
     </div>
-   </div>
+    </div>
     
-  );
+    
+    
+  )
+                }
+                          
 
-}
-
-export default TaskManager;
+export default TaskManager
